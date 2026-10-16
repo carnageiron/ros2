@@ -1,0 +1,26 @@
+services:
+  ros2:
+    image: 4ze-ros2:jazzy-v1.0.0
+
+    container_name: 4ze_ros2
+
+    stdin_open: true
+    tty: true
+
+    network_mode: host
+
+    environment:
+      DISPLAY: ${DISPLAY}
+      WAYLAND_DISPLAY: ${WAYLAND_DISPLAY}
+      XDG_RUNTIME_DIR: /mnt/wslg/runtime-dir
+
+    volumes:
+      - ../mockup_ws:/mockup_ws
+      - ../driverless_ws:/driverless_ws
+      - ../scripts:/scripts
+      - /tmp/.X11-unix:/tmp/.X11-unix
+      - /mnt/wslg:/mnt/wslg
+
+    working_dir: /driverless_ws
+
+    command: bash

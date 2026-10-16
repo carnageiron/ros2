@@ -1,0 +1,22 @@
+# ROS 2 build artifacts
+**/build/
+**/install/
+**/log/
+
+# Python
+__pycache__/
+*.pyc
+
+# VS Code
+.vscode/
+
+# OS files
+Thumbs.db
+.DS_Store
+
+# Docker image archives
+*.tar
+
+# Temporary files
+*.tmp
+*.swp

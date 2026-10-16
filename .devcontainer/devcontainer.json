@@ -1,0 +1,16 @@
+{
+    "name": "4ZE ROS 2 Jazzy",
+    "dockerComposeFile": "../docker/docker-compose.yml",
+    "service": "ros2",
+    "workspaceFolder": "/driverless_ws",
+    "remoteUser": "root",
+    "customizations": {
+        "vscode": {
+            "extensions": [
+                "ms-iot.vscode-ros",
+                "ms-python.python",
+                "ms-vscode.cpptools"
+            ]
+        }
+    }
+}

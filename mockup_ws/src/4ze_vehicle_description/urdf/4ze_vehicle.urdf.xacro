@@ -1,0 +1,166 @@
+<?xml version="1.0"?>
+
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro" name="4ze_vehicle">
+
+  <!-- Vehicle dimensions -->
+  <xacro:property name="wheelbase" value="1.640"/>
+  <xacro:property name="front_track" value="1.340"/>
+  <xacro:property name="rear_track" value="1.380"/>
+
+  <xacro:property name="wheel_radius" value="0.260"/>
+  <xacro:property name="wheel_width" value="0.178"/>
+
+  <xacro:property name="ground_clearance" value="0.080"/>
+
+  <xacro:property name="chassis_length" value="1.800"/>
+  <xacro:property name="chassis_width" value="0.850"/>
+  <xacro:property name="chassis_height" value="0.250"/>
+
+  <!-- Materials -->
+  <material name="chassis_material">
+    <color rgba="0.15 0.15 0.15 1.0"/>
+  </material>
+
+  <material name="wheel_material">
+    <color rgba="0.03 0.03 0.03 1.0"/>
+  </material>
+
+  <material name="seat_material">
+    <color rgba="0.12 0.12 0.12 1.0"/>
+  </material>
+
+  <material name="battery_material">
+    <color rgba="0.65 0.15 0.05 1.0"/>
+  </material>
+
+  <material name="motor_material">
+    <color rgba="0.25 0.25 0.25 1.0"/>
+  </material>
+
+  <!-- Base footprint -->
+  <link name="base_footprint"/>
+
+  <!-- Main vehicle body -->
+  <link name="base_link">
+    <visual>
+      <origin xyz="0 0 0.205" rpy="0 0 0"/>
+      <geometry>
+        <box size="${chassis_length} ${chassis_width} ${chassis_height}"/>
+      </geometry>
+      <material name="chassis_material"/>
+    </visual>
+
+    <collision>
+      <origin xyz="0 0 0.205" rpy="0 0 0"/>
+      <geometry>
+        <box size="${chassis_length} ${chassis_width} ${chassis_height}"/>
+      </geometry>
+    </collision>
+  </link>
+
+  <joint name="base_footprint_to_base_link" type="fixed">
+    <parent link="base_footprint"/>
+    <child link="base_link"/>
+    <origin xyz="0 0 0" rpy="0 0 0"/>
+  </joint>
+
+  <!-- Wheel macro -->
+  <xacro:macro name="wheel" params="name x y">
+    <link name="${name}">
+      <visual>
+        <origin xyz="0 0 0" rpy="${pi/2} 0 0"/>
+        <geometry>
+          <cylinder radius="${wheel_radius}" length="${wheel_width}"/>
+        </geometry>
+        <material name="wheel_material"/>
+      </visual>
+
+      <collision>
+        <origin xyz="0 0 0" rpy="${pi/2} 0 0"/>
+        <geometry>
+          <cylinder radius="${wheel_radius}" length="${wheel_width}"/>
+        </geometry>
+      </collision>
+    </link>
+
+    <joint name="${name}_joint" type="continuous">
+      <parent link="base_link"/>
+      <child link="${name}"/>
+      <origin xyz="${x} ${y} ${wheel_radius}" rpy="0 0 0"/>
+      <axis xyz="0 1 0"/>
+    </joint>
+  </xacro:macro>
+
+  <!-- Wheels -->
+  <xacro:wheel
+    name="front_left_wheel"
+    x="${wheelbase/2}"
+    y="${front_track/2}"/>
+
+  <xacro:wheel
+    name="front_right_wheel"
+    x="${wheelbase/2}"
+    y="${-front_track/2}"/>
+
+  <xacro:wheel
+    name="rear_left_wheel"
+    x="${-wheelbase/2}"
+    y="${rear_track/2}"/>
+
+  <xacro:wheel
+    name="rear_right_wheel"
+    x="${-wheelbase/2}"
+    y="${-rear_track/2}"/>
+
+  <!-- Driver seat -->
+  <link name="driver_seat">
+    <visual>
+      <origin xyz="0 0 0.25" rpy="0 0 0"/>
+      <geometry>
+        <box size="0.65 0.42 0.50"/>
+      </geometry>
+      <material name="seat_material"/>
+    </visual>
+  </link>
+
+  <joint name="driver_seat_joint" type="fixed">
+    <parent link="base_link"/>
+    <child link="driver_seat"/>
+    <origin xyz="0.15 0 0.15" rpy="0 0 0"/>
+  </joint>
+
+  <!-- Accumulator mockup -->
+  <link name="accumulator">
+    <visual>
+      <origin xyz="0 0 0.20" rpy="0 0 0"/>
+      <geometry>
+        <box size="0.70 0.55 0.35"/>
+      </geometry>
+      <material name="battery_material"/>
+    </visual>
+  </link>
+
+  <joint name="accumulator_joint" type="fixed">
+    <parent link="base_link"/>
+    <child link="accumulator"/>
+    <origin xyz="-0.25 0 0.20" rpy="0 0 0"/>
+  </joint>
+
+  <!-- Rear motor mockup -->
+  <link name="motor">
+    <visual>
+      <origin xyz="0 0 0.15" rpy="0 0 0"/>
+      <geometry>
+        <cylinder radius="0.16" length="0.30"/>
+      </geometry>
+      <material name="motor_material"/>
+    </visual>
+  </link>
+
+  <joint name="motor_joint" type="fixed">
+    <parent link="base_link"/>
+    <child link="motor"/>
+    <origin xyz="-0.82 0 0.15" rpy="0 ${pi/2} 0"/>
+  </joint>
+
+</robot>
